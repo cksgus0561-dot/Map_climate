@@ -1,0 +1,107 @@
+{
+  "schema": "garden-climate-solutions-v1",
+  "terrain_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "model_id": "SYNTHETIC UI FIXTURE",
+  "profile_id": "3c1208879fe06a96cd123f655933f768b5e1e6bfb80704d05d9aea396704564a",
+  "candidates": [
+    {
+      "id": "0481cde7c39a9e6a",
+      "label": "기후안 1",
+      "branch": "",
+      "accepted": true,
+      "checks": {
+        "accepted": true
+      },
+      "kind": "isolated_candidate",
+      "local_free_dimension_estimate": 0,
+      "related_to": null,
+      "summary": {
+        "synthetic_fixture": true,
+        "scope": "synthetic_ui_fixture",
+        "seasonal_surface_temperature_c": [
+          13.000000000100808,
+          23.00000000010081,
+          16.00000000010081,
+          5.000000000100808
+        ],
+        "seasonal_precipitation_mm_per_day": [
+          1.0,
+          2.0,
+          1.5,
+          0.5
+        ],
+        "seasonal_snow_cover_fraction": [
+          0.1,
+          0,
+          0.05,
+          0.2
+        ]
+      },
+      "max_scaled_residual": 6.720535239423953e-11,
+      "state_file": "candidate-0481cde7c39a9e6a.npz",
+      "state_sha256": "0c83dd8c0abe2393d4b1a4d8c02230b33e79d531cbbd52a3e329ae139a3bb2e0"
+    },
+    {
+      "id": "9f48bbad7f874594",
+      "label": "기후안 2",
+      "branch": "",
+      "accepted": true,
+      "checks": {
+        "accepted": true
+      },
+      "kind": "isolated_candidate",
+      "local_free_dimension_estimate": 0,
+      "related_to": null,
+      "summary": {
+        "synthetic_fixture": true,
+        "scope": "synthetic_ui_fixture",
+        "seasonal_surface_temperature_c": [
+          6.999999999995463,
+          16.999999999995463,
+          9.999999999995463,
+          -1.0000000000045364
+        ],
+        "seasonal_precipitation_mm_per_day": [
+          1.0,
+          2.0,
+          1.5,
+          0.5
+        ],
+        "seasonal_snow_cover_fraction": [
+          0.1,
+          0,
+          0.05,
+          0.2
+        ]
+      },
+      "max_scaled_residual": 3.0242475190789264e-12,
+      "state_file": "candidate-9f48bbad7f874594.npz",
+      "state_sha256": "f5c375ef4663e5168ec6e09ee828c6f09b71753ec7a0942fec4468ef15628459"
+    }
+  ],
+  "attempts": [
+    {
+      "attempt": 1,
+      "status": "accepted",
+      "accepted": true,
+      "evaluations": 8,
+      "reason": null,
+      "related_to": null,
+      "candidate_id": "0481cde7c39a9e6a",
+      "duplicate": false
+    },
+    {
+      "attempt": 2,
+      "status": "accepted",
+      "accepted": true,
+      "evaluations": 11,
+      "reason": null,
+      "related_to": null,
+      "candidate_id": "9f48bbad7f874594",
+      "duplicate": false
+    }
+  ],
+  "search_complete": false,
+  "stop_reason": "result_limit",
+  "interpretation": "Accepted alternatives; not probabilities or an exhaustive list of all climates."
+}

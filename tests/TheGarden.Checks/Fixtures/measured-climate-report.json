@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-13T21:33:05.548132+09:00",
+  "source_note": "Actual ExoPlaSim 3.4.2 trials on 2026-10-13; selected fields for report parsing regression, not a climate reference",
+  "experiments": [
+    {
+      "execution_status": "completed",
+      "input": {
+        "terrain_sha256": "df563f765819837972f253259ed0999178eb79821e7a9130353e01b9822e4c95"
+      },
+      "measurement": {
+        "run_seconds": 112.12569904000003
+      },
+      "provenance": {
+        "model": "ExoPlaSim",
+        "version": "3.4.2"
+      },
+      "result": {
+        "execution_status": "completed",
+        "climate_status": "unconverged",
+        "convergence_assessed": false,
+        "simulated_years": 1,
+        "annual": [
+          {
+            "year": 1,
+            "execution_and_postprocessing_seconds": 111.818448526,
+            "global_surface_temperature_k": 268.35588634578414,
+            "toa_net_downward_w_m2": 24.07125419868649,
+            "surface_net_downward_w_m2": 27.91660103592266,
+            "precipitation_mm_day": 1.1376419153961512,
+            "precipitation_plus_evaporation_mm_day": -0.021355126897237064
+          }
+        ],
+        "notes": [
+          "A completed short run is not an equilibrated climate or a validated prediction.",
+          "Energy flux and P+E diagnostics are screening indicators, not closed budget residuals with storage.",
+          "Mountain differences from cold starts are not evidence of long-term climate sensitivity."
+        ]
+      }
+    },
+    {
+      "execution_status": "completed",
+      "input": {
+        "terrain_sha256": "42c77e3eaa6ada75433244f4e84dc6ed0f5bec33eaa27089638f9c363df9f029"
+      },
+      "measurement": {
+        "run_seconds": 112.50479648400005
+      },
+      "provenance": {
+        "model": "ExoPlaSim",
+        "version": "3.4.2"
+      },
+      "result": {
+        "execution_status": "completed",
+        "climate_status": "unconverged",
+        "convergence_assessed": false,
+        "simulated_years": 1,
+        "annual": [
+          {
+            "year": 1,
+            "execution_and_postprocessing_seconds": 112.06796368899995,
+            "global_surface_temperature_k": 268.51133602500454,
+            "toa_net_downward_w_m2": 23.972403053024756,
+            "surface_net_downward_w_m2": 27.911436460669627,
+            "precipitation_mm_day": 1.052250446518139,
+            "precipitation_plus_evaporation_mm_day": -0.02039758228899711
+          }
+        ],
+        "notes": [
+          "A completed short run is not an equilibrated climate or a validated prediction.",
+          "Energy flux and P+E diagnostics are screening indicators, not closed budget residuals with storage.",
+          "Mountain differences from cold starts are not evidence of long-term climate sensitivity."
+        ]
+      }
+    },
+    {
+      "execution_status": "run-timeout"
+    }
+  ]
+}

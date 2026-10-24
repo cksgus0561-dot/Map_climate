@@ -1,0 +1,13 @@
+Third-party software bundled with Map
+
+The license texts are included with each component:
+- .NET 10 runtime and WPF (Microsoft) — MIT License. Built into Map.exe.
+- Python 3.12 (Python Software Foundation) — PSF License. climate\python\LICENSE.txt
+- NumPy — BSD 3-Clause. climate\python\Lib\site-packages\numpy-*.dist-info
+- SciPy — BSD 3-Clause (bundles OpenBLAS etc. under their own permissive licenses). climate\python\Lib\site-packages\scipy-*.dist-info
+- Matplotlib — Matplotlib License (PSF-based). climate\python\Lib\site-packages\matplotlib-*.dist-info
+- Matplotlib dependencies (Pillow, contourpy, cycler, fonttools, kiwisolver, packaging, pyparsing,
+  python-dateutil, six) — permissive licenses, see each *.dist-info folder in climate\python\Lib\site-packages.
+
+The climate model uses the Earth-mean physical constants in climate\data\climate\earth-mean-v1.json.
+No Earth observation or reanalysis data is included in this package.

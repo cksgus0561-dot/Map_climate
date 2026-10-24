@@ -1,0 +1,33 @@
+# build output and local caches
+**/bin/
+**/obj/
+**/artifacts/
+__pycache__/
+.dotnet/
+.nuget/
+.runtime/
+*.tmp
+*.garden
+*.map
+Map.lnk
+
+# The public repository holds the app, its climate model (worldclimate v1) and the checks;
+# the research history (other engines, experiments, literature, notes) stays in the local folder only.
+/AGENTS.md
+/CLAUDE.md
+/climate-test.ps1
+/Start-Climate-Test.cmd
+/docs/*
+!/docs/package-readme.txt
+!/docs/package-third-party.txt
+/tests/*
+!/tests/TheGarden.Checks/
+!/tests/TheGarden.DesktopChecks/
+/tools/climate/*
+!/tools/climate/worldclimate/
+!/tools/climate/vector_terrain.py
+!/tools/climate/engine/
+/tools/climate/engine/*
+!/tools/climate/engine/__init__.py
+!/tools/climate/engine/profile.py
+!/tools/climate/engine/astronomy.py

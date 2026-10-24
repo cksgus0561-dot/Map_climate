@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TheGarden.Core/TheGarden.Core.csproj" />
+    <Project Path="src/TheGarden.Desktop/TheGarden.Desktop.csproj" />
+  </Folder>
+  <Folder Name="/tests/"><Project Path="tests/TheGarden.Checks/TheGarden.Checks.csproj" /><Project Path="tests/TheGarden.DesktopChecks/TheGarden.DesktopChecks.csproj" /></Folder>
+</Solution>

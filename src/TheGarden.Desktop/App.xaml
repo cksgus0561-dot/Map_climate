@@ -1,0 +1,153 @@
+<Application x:Class="TheGarden.Desktop.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" StartupUri="MainWindow.xaml">
+ <!-- "Atlas" theme: the map is the page, everything else is a small paper card lying on it. -->
+ <Application.Resources>
+  <FontFamily x:Key="Body">Noto Sans KR, Malgun Gothic, Segoe UI</FontFamily>
+  <FontFamily x:Key="Display">Noto Serif KR, Georgia, Batang</FontFamily>
+
+  <SolidColorBrush x:Key="Paper" Color="#EFE9DD"/>      <!-- page behind the map -->
+  <SolidColorBrush x:Key="Card" Color="#FBF8F2"/>       <!-- floating cards -->
+  <SolidColorBrush x:Key="CardSoft" Color="#F4EFE5"/>
+  <SolidColorBrush x:Key="Ink" Color="#2A2824"/>
+  <SolidColorBrush x:Key="Muted" Color="#7B7466"/>
+  <SolidColorBrush x:Key="Rule" Color="#DDD4C3"/>
+  <SolidColorBrush x:Key="Teal" Color="#2E6B66"/>       <!-- selection, active things -->
+  <SolidColorBrush x:Key="TealSoft" Color="#DCE9E5"/>
+  <SolidColorBrush x:Key="Ochre" Color="#B8682C"/>      <!-- calls to action -->
+  <SolidColorBrush x:Key="OchreSoft" Color="#F3E2D1"/>
+  <SolidColorBrush x:Key="Alert" Color="#A4462F"/>
+  <DropShadowEffect x:Key="Lift" BlurRadius="18" ShadowDepth="3" Direction="270" Opacity=".16" Color="#3A2E1C"/>
+  <!-- state colours; ThemeManager replaces all of these for the dark ("night atlas") theme -->
+  <SolidColorBrush x:Key="HoverFill" Color="#ECE4D6"/><SolidColorBrush x:Key="PressFill" Color="#E2D8C6"/>
+  <SolidColorBrush x:Key="MenuHover" Color="#EFE7D9"/><SolidColorBrush x:Key="LayerHover" Color="#F1EADD"/>
+  <SolidColorBrush x:Key="OnInk" Color="#FBF8F2"/><SolidColorBrush x:Key="ActionText" Color="#FFFCF6"/><SolidColorBrush x:Key="ActionHover" Color="#A35A24"/>
+  <SolidColorBrush x:Key="FieldBg" Color="#FFFDF9"/><SolidColorBrush x:Key="SelectionFill" Color="#9CC2BB"/>
+  <SolidColorBrush x:Key="TrackFill" Color="#EADFCD"/><SolidColorBrush x:Key="ThumbFill" Color="#CFC5B3"/>
+
+  <Style TargetType="Window">
+   <Setter Property="Background" Value="{DynamicResource Paper}"/><Setter Property="Foreground" Value="{DynamicResource Ink}"/>
+   <Setter Property="FontFamily" Value="{StaticResource Body}"/><Setter Property="FontSize" Value="13"/>
+  </Style>
+
+  <!-- text -->
+  <Style x:Key="Caption" TargetType="TextBlock"><Setter Property="Foreground" Value="{DynamicResource Muted}"/><Setter Property="FontSize" Value="11"/></Style>
+  <Style x:Key="Eyebrow" TargetType="TextBlock"><Setter Property="Foreground" Value="{DynamicResource Muted}"/><Setter Property="FontSize" Value="10.5"/><Setter Property="FontWeight" Value="SemiBold"/></Style>
+  <Style x:Key="Title" TargetType="TextBlock"><Setter Property="FontFamily" Value="{StaticResource Display}"/><Setter Property="FontSize" Value="19"/><Setter Property="FontWeight" Value="SemiBold"/></Style>
+  <Style x:Key="Headline" TargetType="TextBlock"><Setter Property="FontFamily" Value="{StaticResource Display}"/><Setter Property="FontSize" Value="24"/><Setter Property="FontWeight" Value="SemiBold"/></Style>
+
+  <!-- cards -->
+  <Style x:Key="Sheet" TargetType="Border">
+   <Setter Property="Background" Value="{DynamicResource Card}"/><Setter Property="BorderBrush" Value="{DynamicResource Rule}"/><Setter Property="BorderThickness" Value="1"/>
+   <Setter Property="CornerRadius" Value="12"/><Setter Property="Padding" Value="16,14"/><Setter Property="Effect" Value="{DynamicResource Lift}"/>
+  </Style>
+  <Style x:Key="Pill" TargetType="Border" BasedOn="{StaticResource Sheet}"><Setter Property="CornerRadius" Value="22"/><Setter Property="Padding" Value="5"/></Style>
+
+  <!-- buttons -->
+  <Style TargetType="Button">
+   <Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="Background" Value="Transparent"/>
+   <Setter Property="Padding" Value="12,7"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FontSize" Value="12.5"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+    <Border x:Name="Chrome" Background="{TemplateBinding Background}" CornerRadius="17" Padding="{TemplateBinding Padding}">
+     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverFill}"/></Trigger>
+     <Trigger Property="IsPressed" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource PressFill}"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".35"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="Action" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="{DynamicResource Ochre}"/><Setter Property="Foreground" Value="{DynamicResource ActionText}"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Padding" Value="20,9"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+    <Border x:Name="Chrome" Background="{TemplateBinding Background}" CornerRadius="19" Padding="{TemplateBinding Padding}">
+     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource ActionHover}"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".4"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="Quiet" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="{DynamicResource CardSoft}"/>
+  </Style>
+  <Style x:Key="MenuItemButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="HorizontalContentAlignment" Value="Left"/><Setter Property="Padding" Value="12,8"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+    <Border x:Name="Chrome" Background="Transparent" CornerRadius="8" Padding="{TemplateBinding Padding}">
+     <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource MenuHover}"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".35"/></Trigger></ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="Chip" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+   <Setter Property="Background" Value="{DynamicResource TealSoft}"/><Setter Property="Foreground" Value="{DynamicResource Teal}"/>
+   <Setter Property="Padding" Value="10,4"/><Setter Property="FontSize" Value="11"/><Setter Property="Margin" Value="0,0,6,6"/>
+  </Style>
+
+  <!-- toggles: segmented pills (mode, view, season, climate state) -->
+  <Style x:Key="Segment" TargetType="RadioButton">
+   <Setter Property="Foreground" Value="{DynamicResource Muted}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FontSize" Value="12.5"/><Setter Property="Padding" Value="16,7"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton">
+    <Border x:Name="Chrome" CornerRadius="17" Background="Transparent" Padding="{TemplateBinding Padding}">
+     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter Property="Foreground" Value="{DynamicResource Ink}"/></Trigger>
+     <Trigger Property="IsChecked" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource Ink}"/><Setter Property="Foreground" Value="{DynamicResource OnInk}"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".35"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <!-- brush palette -->
+  <Style x:Key="Brush" TargetType="RadioButton">
+   <Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Margin" Value="0,2"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton">
+    <Border x:Name="Chrome" Width="46" Height="46" CornerRadius="23" Background="Transparent">
+     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverFill}"/></Trigger>
+     <Trigger Property="IsChecked" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource Teal}"/><Setter Property="Foreground" Value="{DynamicResource OnInk}"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <!-- layer cards in the climate dock: thumbnail + name -->
+  <Style x:Key="LayerCard" TargetType="RadioButton">
+   <Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Margin" Value="0,0,8,0"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton">
+    <Border x:Name="Chrome" CornerRadius="10" Background="Transparent" BorderBrush="Transparent" BorderThickness="2" Padding="5">
+     <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource LayerHover}"/></Trigger>
+     <Trigger Property="IsChecked" Value="True"><Setter TargetName="Chrome" Property="BorderBrush" Value="{DynamicResource Teal}"/><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource TealSoft}"/></Trigger>
+     <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value=".4"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style x:Key="Switch" TargetType="ToggleButton">
+   <Setter Property="Foreground" Value="{DynamicResource Muted}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="FontSize" Value="12"/><Setter Property="Padding" Value="11,7"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ToggleButton">
+    <Border x:Name="Chrome" CornerRadius="17" Background="Transparent" Padding="{TemplateBinding Padding}">
+     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}"/></Border>
+    <ControlTemplate.Triggers>
+     <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Background" Value="{DynamicResource HoverFill}"/></Trigger>
+     <Trigger Property="IsChecked" Value="True"><Setter Property="Foreground" Value="{DynamicResource Teal}"/></Trigger>
+    </ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+
+  <Style TargetType="CheckBox"><Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="Cursor" Value="Hand"/><Setter Property="Margin" Value="0,4"/></Style>
+  <Style TargetType="TextBox">
+   <Setter Property="Foreground" Value="{DynamicResource Ink}"/><Setter Property="Background" Value="{DynamicResource FieldBg}"/><Setter Property="BorderBrush" Value="{DynamicResource Rule}"/>
+   <Setter Property="Padding" Value="8,5"/><Setter Property="CaretBrush" Value="{DynamicResource Teal}"/><Setter Property="SelectionBrush" Value="{DynamicResource SelectionFill}"/>
+  </Style>
+  <Style TargetType="ProgressBar"><Setter Property="Height" Value="5"/><Setter Property="Foreground" Value="{DynamicResource Ochre}"/><Setter Property="Background" Value="{DynamicResource TrackFill}"/><Setter Property="BorderThickness" Value="0"/></Style>
+  <Style TargetType="ToolTip"><Setter Property="Background" Value="{DynamicResource Ink}"/><Setter Property="Foreground" Value="{DynamicResource OnInk}"/><Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="9,5"/></Style>
+  <Style TargetType="ScrollBar">
+   <Setter Property="Width" Value="6"/><Setter Property="Height" Value="6"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ScrollBar"><Grid Background="Transparent"><Track x:Name="PART_Track" Orientation="{TemplateBinding Orientation}"><Track.Thumb><Thumb><Thumb.Template><ControlTemplate TargetType="Thumb"><Border Background="{DynamicResource ThumbFill}" CornerRadius="3" Margin="1"/></ControlTemplate></Thumb.Template></Thumb></Track.Thumb></Track></Grid>
+    <ControlTemplate.Triggers><Trigger Property="Orientation" Value="Vertical"><Setter TargetName="PART_Track" Property="IsDirectionReversed" Value="True"/></Trigger></ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <!-- kept for older windows (ClimateSolutionsWindow) that reference these keys -->
+  <SolidColorBrush x:Key="Bg" Color="#EFE9DD"/><SolidColorBrush x:Key="Panel" Color="#FBF8F2"/><SolidColorBrush x:Key="Line" Color="#DDD4C3"/>
+  <SolidColorBrush x:Key="Accent" Color="#2E6B66"/>
+ </Application.Resources>
+</Application>
