@@ -8,7 +8,9 @@ using TheGarden.Core;
 namespace TheGarden.Desktop;
 public abstract class TerrainView : Grid
 {
-    public event Action<GeoPoint>? Pointed;     // click (mouse down): selects a point
+    // a click with the look-around tool (left press and release without dragging) selects a point; turning or
+    // moving the view, the right button and brush strokes never do
+    public event Action<GeoPoint>? Pointed;
     public event Action<GeoPoint>? Hovered;     // mouse move: readout only
     public event Action<GeoPoint>? StrokeStarted;
     public event Action<GeoPoint>? StrokeMoved;
@@ -24,7 +26,9 @@ public abstract class TerrainView : Grid
     protected BitmapSource? Texture;
     private bool navigating;
     private bool drawing;
-    private Point previous;
+    private bool clicking;          // pressed with the look-around tool and not dragged (yet)
+    private Point previous, pressedAt;
+    private const double ClickSlop = 4;     // DIP the mouse may move and still count as a click
     protected TerrainView()
     {
         Background = Brushes.Transparent; ClipToBounds = true; Focusable = true;
@@ -40,9 +44,9 @@ public abstract class TerrainView : Grid
     {
         base.OnMouseDown(e);
         if (e.ChangedButton != MouseButton.Left && e.ChangedButton != MouseButton.Right) return;
-        Focus(); previous = e.GetPosition(this);
+        Focus(); previous = pressedAt = e.GetPosition(this);
         var p = Pick(previous);
-        if (p.HasValue) Pointed?.Invoke(p.Value);
+        clicking = e.ChangedButton == MouseButton.Left && Tool == TerrainTool.Navigate && p.HasValue;
         navigating = e.ChangedButton == MouseButton.Right || Tool == TerrainTool.Navigate;
         drawing = !navigating && p.HasValue;
         if (drawing) StrokeStarted?.Invoke(p!.Value);
@@ -53,6 +57,7 @@ public abstract class TerrainView : Grid
     {
         base.OnMouseMove(e);
         var current = e.GetPosition(this);
+        if (clicking && (current - pressedAt).Length > ClickSlop) clicking = false;     // a drag turns the view instead
         if (navigating) Navigate(current - previous);
         previous = current;
         var point = Pick(current);
@@ -72,6 +77,7 @@ public abstract class TerrainView : Grid
     {
         base.OnMouseUp(e);
         if (e.ChangedButton != MouseButton.Left && e.ChangedButton != MouseButton.Right) return;
+        if (clicking && e.ChangedButton == MouseButton.Left && Pick(e.GetPosition(this)) is { } p) { clicking = false; Pointed?.Invoke(p); }
         EndInteraction(); e.Handled = true;
     }
     protected override void OnLostMouseCapture(MouseEventArgs e)
@@ -81,7 +87,7 @@ public abstract class TerrainView : Grid
     public void EndInteraction()
     {
         var wasDrawing = drawing;
-        drawing = navigating = false;
+        drawing = navigating = clicking = false;
         if (IsMouseCaptured) ReleaseMouseCapture();
         if (wasDrawing) StrokeFinished?.Invoke();
     }

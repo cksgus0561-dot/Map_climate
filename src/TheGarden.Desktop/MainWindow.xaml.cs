@@ -136,11 +136,19 @@ public partial class MainWindow : Window
             : WorldClimateAtlas.ReadArchive(WorldClimateJob.ArchiveRoot(atlasRepository)).FirstOrDefault(a => a.Matches(terrainHash)));
         UpdateDocumentState();
     }
+    // a place is picked only in the climate view (its climate card); the terrain view has no use for a selection
     private void PointAt(GeoPoint point)
     {
-        if (world is null || busy) return;
+        if (world is null || busy || !ClimateMode) return;
         selected = point; Globe.Marker = Map.Marker = point;
         Globe.RefreshOverlay(); Map.RefreshOverlay(); UpdatePoint();
+    }
+    /// <summary>Back to no picked place: the card closes, the dot goes, and nothing opens the card again until the next click.</summary>
+    private void ClearSelection()
+    {
+        selected = null; Globe.Marker = Map.Marker = null;
+        Globe.RefreshOverlay(); Map.RefreshOverlay();
+        Inspector.Visibility = Visibility.Collapsed; UpdateMapFrame();
     }
     private void HoverAt(GeoPoint p)
     {
@@ -299,6 +307,7 @@ public partial class MainWindow : Window
     {
         if (!initialized) return;
         Globe.EndInteraction(); Map.EndInteraction();
+        ClearSelection();                                     // each view starts without a picked place
         TerrainLayer.Visibility = ClimateMode ? Visibility.Collapsed : Visibility.Visible;
         ClimateLayer.Visibility = ClimateMode ? Visibility.Visible : Visibility.Collapsed;
         if (ClimateMode) NavigateTool.IsChecked = true;      // clicks pick places in the climate view
@@ -796,7 +805,7 @@ public partial class MainWindow : Window
     }
 
     // ======================================================================== climate: inspector
-    private void InspectorClose_Click(object sender, RoutedEventArgs e) { Inspector.Visibility = Visibility.Collapsed; UpdateMapFrame(); }
+    private void InspectorClose_Click(object sender, RoutedEventArgs e) => ClearSelection();
     private void UpdatePointClimate()
     {
         if (!initialized) return;
@@ -866,6 +875,7 @@ public partial class MainWindow : Window
         if (control && e.Key is Key.OemMinus or Key.Subtract) { e.Handled = true; StepTextScale(-1); return; }
         if (control && e.Key is Key.D0 or Key.NumPad0) { e.Handled = true; SetTextScale(1); return; }
         if (Keyboard.FocusedElement is TextBox) return;
+        if (e.Key == Key.Escape && selected is not null) { e.Handled = true; ClearSelection(); return; }
         if (control && e.Key == Key.Z) { e.Handled = true; if (shift) Redo_Click(this, new RoutedEventArgs()); else Undo_Click(this, new RoutedEventArgs()); return; }
         if (control && e.Key == Key.Y) { e.Handled = true; Redo_Click(this, new RoutedEventArgs()); return; }
         if (control) return;

@@ -1,6 +1,5 @@
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using Microsoft.Win32;
 
 namespace TheGarden.Desktop;
@@ -32,9 +31,6 @@ public static class ThemeManager
         {
             var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex)); brush.Freeze(); resources[key] = brush;
         }
-        var lift = new DropShadowEffect { BlurRadius = 18, ShadowDepth = 3, Direction = 270, Opacity = dark ? .5 : .16,
-            Color = dark ? Colors.Black : (Color)ColorConverter.ConvertFromString("#3A2E1C") };
-        lift.Freeze(); resources["Lift"] = lift;
         Dark = dark;
     }
 

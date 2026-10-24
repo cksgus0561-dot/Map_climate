@@ -1,6 +1,6 @@
 <Window x:Class="TheGarden.Desktop.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:TheGarden.Desktop"
  Title="Map" Width="1600" Height="960" MinWidth="1200" MinHeight="760" WindowStartupLocation="CenterScreen" WindowState="Maximized" Closing="OnClosing" PreviewKeyDown="OnKeyDown"
- Background="{DynamicResource Paper}" Foreground="{DynamicResource Ink}" FontFamily="{StaticResource Body}" FontSize="13" TextOptions.TextFormattingMode="Display" UseLayoutRounding="True">
+ Background="{DynamicResource Paper}" Foreground="{DynamicResource Ink}" FontFamily="{StaticResource Body}" FontSize="13" TextOptions.TextFormattingMode="Ideal" UseLayoutRounding="True">
  <Grid x:Name="Page" SizeChanged="Page_SizeChanged">
 
   <!-- the map is the page -->

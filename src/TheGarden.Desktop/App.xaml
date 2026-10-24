@@ -15,7 +15,6 @@
   <SolidColorBrush x:Key="Ochre" Color="#B8682C"/>      <!-- calls to action -->
   <SolidColorBrush x:Key="OchreSoft" Color="#F3E2D1"/>
   <SolidColorBrush x:Key="Alert" Color="#A4462F"/>
-  <DropShadowEffect x:Key="Lift" BlurRadius="18" ShadowDepth="3" Direction="270" Opacity=".16" Color="#3A2E1C"/>
   <!-- state colours; ThemeManager replaces all of these for the dark ("night atlas") theme -->
   <SolidColorBrush x:Key="HoverFill" Color="#ECE4D6"/><SolidColorBrush x:Key="PressFill" Color="#E2D8C6"/>
   <SolidColorBrush x:Key="MenuHover" Color="#EFE7D9"/><SolidColorBrush x:Key="LayerHover" Color="#F1EADD"/>
@@ -37,7 +36,7 @@
   <!-- cards -->
   <Style x:Key="Sheet" TargetType="Border">
    <Setter Property="Background" Value="{DynamicResource Card}"/><Setter Property="BorderBrush" Value="{DynamicResource Rule}"/><Setter Property="BorderThickness" Value="1"/>
-   <Setter Property="CornerRadius" Value="12"/><Setter Property="Padding" Value="16,14"/><Setter Property="Effect" Value="{DynamicResource Lift}"/>
+   <Setter Property="CornerRadius" Value="12"/><Setter Property="Padding" Value="16,14"/>
   </Style>
   <Style x:Key="Pill" TargetType="Border" BasedOn="{StaticResource Sheet}"><Setter Property="CornerRadius" Value="22"/><Setter Property="Padding" Value="5"/></Style>
 

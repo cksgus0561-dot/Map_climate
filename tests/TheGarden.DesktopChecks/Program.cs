@@ -78,6 +78,15 @@ internal static class Program
             Assert(((FrameworkElement)window.FindName("LegendCard")).Visibility==Visibility.Visible && ((Image)window.FindName("ClimateLegend")).Visibility==Visibility.Visible,"legend shown with a climate layer");
             Call(window,"PointAt",new GeoPoint(1,1));
             Assert(((TextBlock)window.FindName("ClimatePointText")).Text.Contains("Af") && ((FrameworkElement)window.FindName("Inspector")).Visibility==Visibility.Visible,"clicked place shows its climate");
+            var inspector=(FrameworkElement)window.FindName("Inspector");
+            Call(window,"InspectorClose_Click",window,new RoutedEventArgs());
+            Assert(inspector.Visibility!=Visibility.Visible && map.Marker is null && globe.Marker is null,"closing the card drops the picked place");
+            layerItems[0].IsChecked=true; layerItems[1].IsChecked=true; Call(window,"RefreshTerrain");
+            Assert(inspector.Visibility!=Visibility.Visible,"a closed card stays closed when the layer changes");
+            Call(window,"PointAt",new GeoPoint(1,1));
+            ((RadioButton)window.FindName("ModeTerrain")).IsChecked=true; ((RadioButton)window.FindName("ModeClimate")).IsChecked=true;
+            Assert(inspector.Visibility!=Visibility.Visible && map.Marker is null,"switching views drops the picked place");
+            Call(window,"PointAt",new GeoPoint(1,1));
             // the planet from space: natural colour theme, globe in space mode, cloud deck on demand
             var satDir=Path.Combine(Path.GetTempPath(),"garden-atlas-sat-"+Guid.NewGuid().ToString("N"));
             AtlasFixture.Write(satDir,loaded.Fingerprint(),loaded.Width,loaded.Height,path =>
