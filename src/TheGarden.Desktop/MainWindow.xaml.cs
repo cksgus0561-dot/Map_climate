@@ -369,7 +369,7 @@ public partial class MainWindow : Window
         // so the bar never covers the map
         if (!ClimateMode && Page.ActualWidth > 0)
         {
-            var bar = (BrushCard.ActualHeight > 0 ? BrushCard.ActualHeight : 62) * k;
+            var bar = (brushBarHeight > 0 ? brushBarHeight : 62) * k;
             var label = 30 * k;                                  // the map's "90° N" label just above it
             if (ViewGlobeButton.IsChecked == true)
             {
@@ -394,7 +394,15 @@ public partial class MainWindow : Window
         var width = Math.Max(1, Math.Min(w - 24, (h - 60) * 2));
         return (m.Left + (w - width) / 2, m.Top + (h - width / 2) / 2);
     }
-    private void BrushCard_SizeChanged(object sender, SizeChangedEventArgs e) { if (initialized) UpdateMapFrame(); }
+    // The bar's height as last placed. At a fractional Windows scale (125 %) where the bar lands changes its rounded height
+    // by a pixel, and placing it by that height moves it again: the bar shook. So a pixel's change is not a new height.
+    private double brushBarHeight;
+    private void BrushCard_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (Math.Abs(e.NewSize.Height - brushBarHeight) < 1.5) return;
+        brushBarHeight = e.NewSize.Height;
+        if (initialized) UpdateMapFrame();
+    }
     private void View_Checked(object sender, RoutedEventArgs e)
     {
         if (!initialized) return;
