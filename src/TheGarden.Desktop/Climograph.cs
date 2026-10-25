@@ -15,7 +15,7 @@ public sealed class Climograph : FrameworkElement
         temperature = temperatureC; precipitation = precipitationMmDay; InvalidateVisual();
     }
 
-    protected override Size MeasureOverride(Size available) => new(double.IsInfinity(available.Width) ? 300 : available.Width, 132);
+    protected override Size MeasureOverride(Size available) => new(double.IsInfinity(available.Width) ? 300 : available.Width, 150);
 
     protected override void OnRender(DrawingContext dc)
     {
@@ -28,7 +28,15 @@ public sealed class Climograph : FrameworkElement
         var dot = Theme("Card", Colors.White);
         FormattedText Text(string s, double size = 10) => new(s, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, face, size, ink, dpi);
 
-        double left = 34, right = ActualWidth - 34, top = 8, bottom = ActualHeight - 22, w = right - left, h = bottom - top;
+        // key line on top: what the bars and the line are
+        var rainKey = Text("강수 (월평균 mm)"); var heatKey = Text("기온 (°C)");
+        var ky = 1 + rainKey.Height / 2; var kx = 34.0;
+        dc.DrawRoundedRectangle(rain, null, new Rect(kx, ky - 5, 7, 10), 1.5, 1.5);
+        dc.DrawText(rainKey, new Point(kx + 11, ky - rainKey.Height / 2)); kx += 11 + rainKey.Width + 18;
+        dc.DrawLine(heat, new Point(kx, ky), new Point(kx + 16, ky)); dc.DrawEllipse(dot, heat, new Point(kx + 8, ky), 3, 3);
+        dc.DrawText(heatKey, new Point(kx + 21, ky - heatKey.Height / 2));
+
+        double left = 34, right = ActualWidth - 34, top = 26, bottom = ActualHeight - 22, w = right - left, h = bottom - top;
         var monthly = p.Select(x => x * 30.44).ToArray();
         var rainMax = Math.Max(100, Math.Ceiling(monthly.Max() / 50) * 50);
         var tMin = Math.Min(-10, Math.Floor((t.Min() - 3) / 10) * 10); var tMax = Math.Max(30, Math.Ceiling((t.Max() + 3) / 10) * 10);
