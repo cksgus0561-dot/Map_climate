@@ -52,14 +52,15 @@ public static class WorldFile
         });
     }
     private const string ClimatePrefix = "climate/";
-    // what the app reads of a result: result.json and per state climate.json, point.bin, layers/, legends/
+    // what the app reads of a result: result.json and per state climate.json, point.json + point.bin (the clicked
+    // place's own climate; without point.json the card falls back to the 480 km cell mean), layers/, legends/
     // (not the model's copy of the terrain, its logs or the summary sheets)
     private static bool KeptClimateFile(string name)
     {
         if (name == "result.json") return true;
         var parts = name.Split('/');
         if (parts.Length < 2 || !parts[0].StartsWith("state-", StringComparison.Ordinal)) return false;
-        return parts.Length == 2 ? parts[1] is "climate.json" or "point.bin" : parts.Length == 3 && parts[1] is "layers" or "legends";
+        return parts.Length == 2 ? parts[1] is "climate.json" or "point.json" or "point.bin" : parts.Length == 3 && parts[1] is "layers" or "legends";
     }
     /// <summary>Unpacks the climate result kept in a map file into an empty folder; false when the file has none.</summary>
     public static bool ExtractClimate(string path, string directory)

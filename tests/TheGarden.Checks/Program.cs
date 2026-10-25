@@ -175,7 +175,10 @@ Check("A map file keeps its climate: saved with the map, unpacked on opening, wi
     {
         var world = TerrainExamples.Create(128, 64, 512); var hash = world.Fingerprint();
         var result = AtlasFixture.Write(Path.Combine(folder, "result"), hash, world.Width, world.Height, p => File.WriteAllBytes(p, [9, 8, 7]));
-        File.WriteAllBytes(Path.Combine(result, "state-0", "point.bin"), [1, 2, 3]);
+        // the clicked place's own climate: a 4 x 2 raster of 4 seasons and its description
+        File.WriteAllBytes(Path.Combine(result, "state-0", "point.bin"), new byte[4 * 2 * (4 * 4 + 4)]);
+        File.WriteAllText(Path.Combine(result, "state-0", "point.json"),
+            """{"width":4,"height":2,"seasons":4,"file":"point.bin","koppen":["Af"],"koppen_names":["열대 우림"],"biomes":["열대 우림"]}""");
         foreach (var extra in new[] { "input.garden", "launcher.log", "status.json", Path.Combine("state-0", "winds.png") })
             File.WriteAllText(Path.Combine(result, extra), "not kept");
         var map = Path.Combine(folder, "world.map"); WorldFile.Save(world, map, result);
@@ -184,7 +187,8 @@ Check("A map file keeps its climate: saved with the map, unpacked on opening, wi
         Assert(WorldFile.ExtractClimate(map, opened), "climate found in the map file");
         var atlas = WorldClimateAtlas.Read(opened);
         Assert(atlas.Matches(hash) && atlas.States.Count == 1, "the unpacked climate belongs to the terrain");
-        foreach (var file in new[] { "result.json", Path.Combine("state-0", "climate.json"), Path.Combine("state-0", "point.bin"), Path.Combine("state-0", "layers", "temperature_annual.png") })
+        Assert(atlas.Pixel(0, new GeoPoint(10, 20)) is { Koppen: "Af" }, "the clicked place's own climate comes back, not the cell mean");
+        foreach (var file in new[] { "result.json", Path.Combine("state-0", "climate.json"), Path.Combine("state-0", "point.json"), Path.Combine("state-0", "point.bin"), Path.Combine("state-0", "layers", "temperature_annual.png") })
             Assert(File.ReadAllBytes(Path.Combine(opened, file)).AsSpan().SequenceEqual(File.ReadAllBytes(Path.Combine(result, file))), "same file: " + file);
         Assert(!File.Exists(Path.Combine(opened, "input.garden")) && !File.Exists(Path.Combine(opened, "launcher.log")) &&
                !File.Exists(Path.Combine(opened, "status.json")) && !File.Exists(Path.Combine(opened, "state-0", "winds.png")), "the model's own files stay out");
