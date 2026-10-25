@@ -47,6 +47,10 @@ Set-Content (Join-Path $python 'python312._pth') -Encoding ascii -Value @('pytho
 py -3.12 -m pip install --disable-pip-version-check --no-compile --only-binary=:all: --platform win_amd64 --python-version 3.12 `
     --implementation cp --cache-dir (Join-Path $cache 'pip') --target (Join-Path $python 'Lib\site-packages') @wheels
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+# pip's command-line launchers (f2py.exe, ttx.exe, ...) carry the full path of the Python that installed them, which
+# names this computer's user folder; the app never runs them
+$launchers = Join-Path $python 'Lib\site-packages\bin'
+if (Test-Path $launchers) { Remove-Item -Recurse -Force $launchers }
 
 # ---- model: only what worldclimate imports (worldclimate, vector_terrain, engine.profile/astronomy) and its data
 $tools = Join-Path $climate 'tools\climate'
@@ -62,6 +66,18 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Copy-Item (Join-Path $root 'docs\package-readme.txt') (Join-Path $out 'README.txt')
 Copy-Item (Join-Path $root 'docs\package-third-party.txt') (Join-Path $out 'THIRD-PARTY-NOTICES.txt')
+
+# ---- check: no file of the public package names this computer's user folder (C:\Users\<account>), as text or UTF-16
+$profiles = @($env:USERPROFILE, $env:USERPROFILE.Replace('\', '/'))
+$leaks = foreach ($file in Get-ChildItem $out -Recurse -File) {
+    $bytes = [IO.File]::ReadAllBytes($file.FullName)
+    $text = [Text.Encoding]::GetEncoding(28591).GetString($bytes); $wide = [Text.Encoding]::Unicode.GetString($bytes)
+    foreach ($p in $profiles) {
+        if ($text.IndexOf($p, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or $wide.IndexOf($p, [StringComparison]::OrdinalIgnoreCase) -ge 0) { $file.FullName; break }
+    }
+}
+if ($leaks) { "package names the user folder in:"; $leaks; exit 1 }
+"no user folder in the package"
 
 # ---- zip
 $zip = Join-Path $root ("artifacts\package\Map-" + (Get-Date -Format 'yyyyMMdd') + '.zip')
